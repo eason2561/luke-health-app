@@ -1,6 +1,6 @@
 // Caches the app shell so it opens offline. Data always comes from api.github.com
 // (never cached here); unsynced writes wait in the IndexedDB outbox.
-const VERSION = "lukelog-v1"; // keep in step with APP_VERSION in js/app.js
+const VERSION = "lukelog-v2"; // keep in step with APP_VERSION in js/app.js
 const SHELL = [
   "./", "index.html", "styles.css", "manifest.webmanifest", "icon.svg",
   "js/app.js", "js/github.js", "js/outbox.js", "js/model.js", "vendor/js-yaml.min.js",

@@ -8,6 +8,8 @@ export const OPTIONS = {
   painSites: ["Feet", "Knees", "Legs", "Hips", "Back", "Neck", "Hands or wrists", "Chest", "Stomach", "Head"],
   allergy: ["Itch or hives", "Flushing", "Stomach upset", "Wheeze or cough", "Throat tightness", "Runny nose or eyes"],
   moods: ["Good", "OK", "Low", "Anxious", "Irritable", "Tired"],
+  painkillers: ["Ibuprofen", "Acetaminophen"],
+  exercise: ["Foot exercises", "PT exercises", "Walk", "Swim", "Bike", "Training", "Other"],
   positions: ["Lying", "Sitting", "Standing", "Just stood up", "Walking", "After exercise"],
   episodeSymptoms: ["Pounding heart", "Dizzy", "Chest pain", "Short of breath", "Flushing", "Sweaty", "Shaky", "Scared", "None"],
   standingSymptoms: ["Dizzy", "Light-headed", "Blurry vision", "Nausea", "Shaky", "None"],

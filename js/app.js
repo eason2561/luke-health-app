@@ -7,7 +7,7 @@ import {
   mergeChanged, hoursAsleepWindow, standingRise, hoursSinceDose, stamp, toYaml,
 } from "./model.js";
 
-export const APP_VERSION = "lukelog-v1"; // keep in step with VERSION in sw.js
+export const APP_VERSION = "lukelog-v2"; // keep in step with VERSION in sw.js
 
 const yaml = window.jsyaml;
 const view = document.getElementById("view");
@@ -211,18 +211,26 @@ async function renderDaily(params) {
       field("Vyvanse", timeInput(rec.vyvanse_time, (v) => set("vyvanse_time", v))),
       field("Breakfast", timeInput(rec.meals?.breakfast, (v) => setIn("meals", "breakfast", v))),
       field("Lunch", timeInput(rec.meals?.lunch, (v) => setIn("meals", "lunch", v))),
-      field("Dinner", timeInput(rec.meals?.dinner, (v) => setIn("meals", "dinner", v)))),
+      field("Dinner", timeInput(rec.meals?.dinner, (v) => setIn("meals", "dinner", v))),
+      field("Pain medicine today", chips(OPTIONS.painkillers, rec.painkillers, (v) => set("painkillers", v), { multi: true })),
+      field("Any medicine missed, changed or extra", textInput(rec.med_note, (v) => set("med_note", v), { placeholder: "e.g. cetirizine missed" }))),
     section("Feet",
       field("Foot pain this morning (0 none, 10 worst)", scale(rec.foot_pain?.am, (v) => setIn("foot_pain", "am", v))),
       field("Foot pain this evening", scale(rec.foot_pain?.pm, (v) => setIn("foot_pain", "pm", v))),
-      field("Shoes worn today", chips(OPTIONS.shoes, rec.shoes, (v) => set("shoes", v), { multi: true }))),
+      field("Shoes worn today", chips(OPTIONS.shoes, rec.shoes, (v) => set("shoes", v), { multi: true })),
+      field("Insoles or orthoses worn", chips(["Yes", "No"], yesNo(rec.insoles), (v) => set("insoles", fromYesNo(v))))),
+    section("Exercise",
+      field("What he did", chips(OPTIONS.exercise, rec.exercise, (v) => set("exercise", v), { multi: true })),
+      field("Minutes in total", numberInput(rec.exercise_minutes, (v) => set("exercise_minutes", v), { min: 0, max: 600 }))),
     section("Other pain",
       field("Where", chips(OPTIONS.painSites, other.sites, (v) => setIn("other_pain", "sites", v), { multi: true })),
       field("Worst level today", scale(other.score, (v) => setIn("other_pain", "score", v)))),
     section("Fears",
       field("Any fear or panic today?", chips(["Yes", "No"], fears.happened === true ? "Yes" : fears.happened === false ? "No" : "",
         (v) => { setIn("fears", "happened", v === "Yes" ? true : v === "No" ? false : undefined); fearDetail.hidden = v !== "Yes"; })),
-      fearDetail),
+      fearDetail,
+      field("Worry or fear overall today (0 calm, 10 worst)", scale(rec.worry, (v) => set("worry", v))),
+      field("Did the fear practice from his plan", chips(["Yes", "No"], yesNo(rec.fear_practice), (v) => set("fear_practice", fromYesNo(v))))),
     section("Allergy-type symptoms",
       chips(OPTIONS.allergy, rec.allergy_symptoms, (v) => set("allergy_symptoms", v), { multi: true }),
       h("small", { class: "muted", text: "Two or more at once (e.g. hives with stomach upset): note the time in Notes." })),
@@ -237,6 +245,9 @@ async function renderDaily(params) {
       field("Notes", textArea(rec.notes, (v) => set("notes", v)))),
     h("div", { class: "savebar" }, dirty, saveBtn));
 }
+
+const yesNo = (b) => (b === true ? "Yes" : b === false ? "No" : "");
+const fromYesNo = (v) => (v === "Yes" ? true : v === "No" ? false : undefined);
 
 function shift(date, days) {
   const d = new Date(date + "T12:00:00");
